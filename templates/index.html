@@ -1,0 +1,69 @@
+{% extends 'layouts/layout.html' %}
+    {% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/home/index.css' %}">
+{% endblock %}
+
+{% block title %}WebServer{% endblock %}
+
+{% block content %}
+    {% load static %}
+    <h1>Domácí server</h1>
+
+    <table id="myTable" class="table table-striped table-borderless table-hover w-100">
+        <thead class="thead-dark">
+            <tr>
+                <th>Typ</th>
+                <th>IP adresa</th>
+                <th>Název</th>
+                <th>Poslední změna</th>
+                {% if user.is_authenticated %}
+                    <th>Editace</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for device in devices %}
+                {% if not device.urls %}
+                    <tr>
+                {% elif device.urls|length == 1 %}
+
+                    <tr onclick="window.location = '{{ device.urls.0.url }}'">
+                {% else %}
+                    <tr onclick="window.location = '/device/{{ device.id }}/urls'">
+                {% endif %}
+                        <td>{{ device.type }}</td>
+                        <td>{{ device.ip_address }}</td>
+                        <td>{{ device.name }}</td>
+                        <td>{{ device.updated_at }}</td>
+                {% if user.is_authenticated %}
+                    <td>EDIT</td>
+                {% endif %}
+                    </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-2">
+        <a class="btn btn-outline-primary" href="/device/create">Nové zařízení</a>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script>                                            //řazení tabulky
+        $(document).ready(function() {
+            $(`#myTable`).DataTable({
+                "paging": false,
+                "searching": false,
+                "info": false,
+            {% if user.is_authenticated %}
+                columnDefs: [{
+                    orderable: false,
+                    targets: 4,
+                }]
+            {% endif %}
+            }).order([1, 'asc']).draw();;
+        });
+    </script>
+{% endblock %}

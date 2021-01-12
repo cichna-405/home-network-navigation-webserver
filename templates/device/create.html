@@ -1,0 +1,46 @@
+{% extends 'layouts/layout.html' %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block title %}Zařízení | Vytvořit{% endblock %}
+
+{% block content %}
+    <h1>Vytvořit nové zařízení</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Název:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Název zařízení">
+        </div>
+
+        <div class="form-group">
+            <label for="ip_address">IP adresa:</label>
+            <input type="text" class="form-control" id="ip_address" name="ip_address" placeholder="IP adresa zařízení">
+        </div>
+
+        <div class="form-group">
+            <label for="type">Typ zařízení:</label>
+            <select class="form-control" id="type" name="type">
+                <!--<option disabled selected value="Neznámé">Neznámý</option> -->
+                <option selected value="Neznámé">Neznámý</option>
+                {% for choice in choices %}
+                    {% if choice.1 != 'Neznámé' %}
+                        <option value="{{ choice.1 }}">{{ choice.1 }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Popis:</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+        <input type="submit" class="btn btn-outline-primary" value="Vytvořit zařízení">
+    </form>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}
