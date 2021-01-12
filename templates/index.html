@@ -27,7 +27,6 @@
                 {% if not device.urls %}
                     <tr>
                 {% elif device.urls|length == 1 %}
-
                     <tr onclick="window.location = '{{ device.urls.0.url }}'">
                 {% else %}
                     <tr onclick="window.location = '/device/{{ device.id }}/urls'">
@@ -36,9 +35,9 @@
                         <td>{{ device.ip_address }}</td>
                         <td>{{ device.name }}</td>
                         <td>{{ device.updated_at }}</td>
-                {% if user.is_authenticated %}
-                    <td>EDIT</td>
-                {% endif %}
+                        {% if user.is_authenticated %}
+                            <td>EDIT</td>
+                        {% endif %}
                     </tr>
             {% endfor %}
         </tbody>

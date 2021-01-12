@@ -27,6 +27,6 @@ class Device(models.Model):
 
 
 class Url(models.Model):
-    device_id = models.ForeignKey('Device', on_delete=models.CASCADE, related_name='urls')
+    device = models.ForeignKey('Device', on_delete=models.CASCADE, related_name='urls')
     name = models.CharField(max_length=80, default='Neznámá URL')
     url = models.URLField()
