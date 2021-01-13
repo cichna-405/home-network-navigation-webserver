@@ -1,5 +1,13 @@
-.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-  background-color: dimgrey;
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {          /* color on table hover */
+  background-color: darkgray;
   color: white;
-  cursor: pointer;
+}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover .url_link {
+  color: white
+}
+
+
+
+#myTable td {                        /* text of table aligned to center of the line */
+  vertical-align: middle;
 }

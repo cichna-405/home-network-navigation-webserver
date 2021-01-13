@@ -34,7 +34,7 @@ def create(request):
         return redirect('index')
 
 
-# DOPSAT
+# TODO: write edit method
 
 @require_http_methods(['GET', 'POST'])
 def edit(request, device_id):
@@ -46,7 +46,7 @@ def edit(request, device_id):
         return redirect('index')
 
 
-# DOPSAT
+# TODO: write delete method
 
 @require_http_methods(['POST'])
 def delete(request, device_id):
@@ -55,7 +55,7 @@ def delete(request, device_id):
     return redirect('index')
 
 
-# DOPSAT
+# TODO: write urls method
 
 def urls(request, device_id):
     device = Device.objects.get(id=device_id)

@@ -1,6 +1,19 @@
-function submitForm(button_id, form_id) {
-    if (confirm(`Vážně chcete smazat zařízení ${button_id.split('_')[1]} z databáze? Tuhle akci nelze vrátit.`))
+function deleteFormSubmit(device_name, form_id) {
+    if (confirm(`Vážně chcete smazat zařízení '${device_name}' z databáze? Tuhle akci nelze vrátit.`))
     {
-        document.getElementById(form_id).submit();
+        $(`#${form_id}`).submit();
     }
 }
+
+
+/* DELETE / EDIT / GOTOURL buttons in the table */
+$('.prevent_redirect').click(caller => {
+    if(caller.id === 'delete')
+    {
+
+    }
+    else if (caller.id.startsWith('edit_')) {
+
+    }
+    else return false
+})
