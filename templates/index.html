@@ -36,7 +36,22 @@
                         <td>{{ device.name }}</td>
                         <td>{{ device.updated_at }}</td>
                         {% if user.is_authenticated %}
-                            <td>EDIT</td>
+                            <td>                                                                    // TODO: prevent going to device url/urls
+                                <div class="p-0 m-0 row">
+                                    <div class="col-6">
+                                        <a type="button" href="/device/{{ device.id }}/edit" class="btn btn-outline-dark">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </div>
+
+                                    <form class="m-0 p-0 col-6" method="post" action="/device/{{ device.id }}/delete" id="deleteForm_{{ device.id }}">
+                                        {% csrf_token %}
+                                        <button type="button" class="btn btn-outline-danger" id="deleteButton_{{ device.id }}" onclick="submitForm(this.id, document.getElementById(this.id).parentElement.id);">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         {% endif %}
                     </tr>
             {% endfor %}
@@ -65,4 +80,5 @@
             }).order([1, 'asc']).draw();;
         });
     </script>
+    <script type="text/javascript" src="{% static 'js/home/index.js' %}"></script>
 {% endblock %}
