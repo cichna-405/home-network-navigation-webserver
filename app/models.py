@@ -23,8 +23,14 @@ class Device(models.Model):
     ip_address = models.CharField(
         max_length=15,
         unique=True,
+        null=False,
+        blank=False,
     )
-    name = models.CharField(max_length=80)
+    name = models.CharField(
+        max_length=80,
+        null=False,
+        blank=False,
+    )
     description = models.CharField(
         max_length=150,
         null=True,
@@ -35,7 +41,6 @@ class Device(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        default=None,
         related_name='default_for_device',
     )
     created_at = models.DateTimeField(
@@ -54,9 +59,16 @@ class Url(models.Model):
         'Device',
         on_delete=models.CASCADE,
         related_name='urls',
+        null=False,
+        blank=False,
     )
     name = models.CharField(
         max_length=80,
+        null=False,
+        blank=False,
         default='Neznámá URL',
     )
-    url = models.URLField()
+    url = models.URLField(
+        null=False,
+        blank=False,
+    )
