@@ -13,7 +13,7 @@
     <table id="myTable" class="table table-striped table-borderless table-hover w-100 user-select-none">
         <thead class="thead-dark">
             <tr>
-                <th hidden>ip address value</th>
+                <th hidden>ip_address_numeric_value</th>
                 <th>Typ</th>
                 <th>Odkazy</th>
                 <th>Název</th>
@@ -74,18 +74,23 @@
                 "paging": false,
                 "searching": false,
                 "info": false,
-            {% if user.is_authenticated %}
                 columnDefs: [
-            { "orderData":[ 0 ],   "targets": [ 2 ] },
-{
-        "targets": [ 0 ],
-        "visible": false,
-        "searchable": false
-    },{
-                    orderable: false,
-                    targets: 5,
-                }]
-            {% endif %}
+                {
+                    "orderData":[ 0 ],
+                    "targets": [ 2 ],
+                },
+                {
+                    "targets": [ 0 ],
+                    "visible": false,
+                    "searchable": false
+                },
+                {% if user.is_authenticated %}
+                    {
+                        orderable: false,
+                        targets: 5,
+                    },
+                {% endif %}
+                ]
             }).order([2, 'asc']).draw();
         });
     </script>
