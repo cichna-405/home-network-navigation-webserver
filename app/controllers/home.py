@@ -29,4 +29,11 @@ def index(request):
             if choice[0] == current_device.type:
                 device['type'] = choice[1]
 
+        ip_add_numeric = ""  # numeric ip address for table sorting
+        for octet in current_device.ip_address.split("."):
+            while len(octet) < 3:
+                octet = "0" + octet
+            ip_add_numeric += octet
+        device['ip_address_numeric'] = ip_add_numeric
+
     return render(request, 'index.html', {'devices': devices})

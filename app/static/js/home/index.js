@@ -4,3 +4,7 @@ function deleteFormSubmit(device_name, form_id) {
         $(`#${form_id}`).submit();
     }
 }
+
+$(function () {                                         // Tooltips initializer
+  $('[data-toggle="tooltip"]').tooltip()
+})

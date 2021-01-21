@@ -13,8 +13,9 @@
     <table id="myTable" class="table table-striped table-borderless table-hover w-100 user-select-none">
         <thead class="thead-dark">
             <tr>
+                <th hidden>ip address value</th>
                 <th>Typ</th>
-                <th>Webové rozhraní</th>
+                <th>Odkazy</th>
                 <th>Název</th>
                 <th>Poslední změna</th>
                 {% if user.is_authenticated %}
@@ -25,14 +26,15 @@
         <tbody>
             {% for device in devices %}
                 <tr>
+                    <td hidden>{{ device.ip_address_numeric }}</td>
                     <td>{{ device.type }}</td>
                     <td>
                         {% if device.default_url %}
-                            <button class="btn btn-link p-0 m-0 url_link" onclick="window.open(`{{ device.default_url.url }}`);">{{ device.ip_address }}</button>
+                            <button class="btn btn-link p-0 m-0 url_link" onclick="window.open(`{{ device.default_url.url }}`);" data-toggle="tooltip" data-placement="top" title="{{ device.default_url.name }} ({{ device.default_url.url }})">{{ device.ip_address }}</button>
                         {% else %}
-                            {{ device.ip_address }}
+                            <x data-toggle="tooltip" data-placement="top" title="žádná výchozí URL">{{ device.ip_address }}</x>
                         {% endif %}
-                        (<a class="url_link" href="/device/{{ device.id }}/urls"><small>všechny URL</small></a>)                            <!-- TODO: solve problem with default device url -->
+                        (<a class="url_link" href="/device/{{ device.id }}/urls"><small>všechny URL</small></a>)
                     </td>
                     <td>{{ device.name }}</td>
                     <td>{{ device.updated_at }}</td>
@@ -73,12 +75,18 @@
                 "searching": false,
                 "info": false,
             {% if user.is_authenticated %}
-                columnDefs: [{
+                columnDefs: [
+            { "orderData":[ 0 ],   "targets": [ 2 ] },
+{
+        "targets": [ 0 ],
+        "visible": false,
+        "searchable": false
+    },{
                     orderable: false,
-                    targets: 4,
+                    targets: 5,
                 }]
             {% endif %}
-            }).order([1, 'asc']).draw();;
+            }).order([2, 'asc']).draw();
         });
     </script>
     <script type="text/javascript" src="{% static 'js/home/index.js' %}"></script>
