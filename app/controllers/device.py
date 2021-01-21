@@ -16,20 +16,39 @@ from app.models import Device, Url
 def create(request):
     if request.method == "GET":
         choices = Device._meta.get_field('type').choices
-        return render(request, 'device/create.html', {'choices': choices})      # choices = array of possible device types
+        return render(request, 'device/create.html', {'choices': choices})  # choices = array of possible device types
+
     else:
-        device_type = request.POST.get('type')
-
+        device_type = request.POST.get('type')                              # device type
         if not device_type:
-            device_type = 'Neznámé'
+            device_type = 'UK'
 
-        new_device = Device.objects.create(
+        new_device = Device.objects.create(                                 # device creation
             type=device_type,
             ip_address=request.POST.get('ip_address'),
             name=request.POST.get('name'),
             description=request.POST.get('description'),
         )
         new_device.save()
+
+        i = 1
+        while True:                                                         # urls creation
+            url_name = request.POST.get('url_' + str(i) + '_name')
+            url_url = request.POST.get('url_' + str(i) + '_url')
+            if not url_name or not url_url:
+                break
+            new_url = Url.objects.create(
+                name=url_name,
+                url=url_url,
+                device=new_device,
+            )
+            new_url.save()
+
+            if i is 1:                                                      # set default_url for the device
+                Device.objects.filter(ip_address=new_device.ip_address).update(default_url=new_url)
+
+            i += 1
+
         messages.success(request, 'Created device ' + new_device.name)
         return redirect('index')
 
@@ -40,23 +59,31 @@ def create(request):
 def edit(request, device_id):
     device = Device.objects.get(id=device_id)
     if request.method == "GET":
+        if device.urls.all().exists():
+            device['urls'] = device.urls.all()
         return render(request, 'device/edit.html', {'device': device})
     else:
         messages.success(request, 'Edited device ' + str(device.name))
         return redirect('index')
 
 
-# TODO: write delete method
-
 @require_http_methods(['POST'])
 def delete(request, device_id):
     device = Device.objects.get(id=device_id)
-    messages.success(request, 'Deleted device ' + device.name)
+    deleted = Device.objects.get(id=device_id).delete()
+    if deleted:
+        messages.success(request, "Deleted device " + device.name)
+    else:
+        messages.error(request, "Device " + device.name + " couldn't be deleted.")
     return redirect('index')
 
 
 # TODO: write urls method
 
 def urls(request, device_id):
+
+    # if current_device.urls.all().exists():  # all urls field
+    #     device['urls'] = current_device.urls.all()
+
     device = Device.objects.get(id=device_id)
     return render(request, 'device/urls.html', {'device': device})

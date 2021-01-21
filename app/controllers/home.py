@@ -14,9 +14,19 @@ from app.models import Device, Url
 @require_http_methods(['GET'])
 def index(request):
     devices = Device.objects.all().values()
+    choices = Device._meta.get_field('type').choices
 
     for device in devices:
-        if Device.objects.get(id=device['id']).urls.all().exists():
-            device['urls'] = Device.objects.get(id=device['id']).urls.all()
+        current_device = Device.objects.get(id=device['id'])
+
+        if current_device.default_url is not None:     # default url field
+            device['default_url'] = {
+                'url': current_device.default_url.url,
+                'name': current_device.default_url.name,
+            }
+
+        for choice in choices:
+            if choice[0] == current_device.type:
+                device['type'] = choice[1]
 
     return render(request, 'index.html', {'devices': devices})

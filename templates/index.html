@@ -27,8 +27,8 @@
                 <tr>
                     <td>{{ device.type }}</td>
                     <td>
-                        {% if device.urls|length == 1 %}
-                            <button class="btn btn-link p-0 m-0 url_link" onclick="window.open(`{{ device.urls.0.url }}`);">{{ device.ip_address }}</button>
+                        {% if device.default_url %}
+                            <button class="btn btn-link p-0 m-0 url_link" onclick="window.open(`{{ device.default_url.url }}`);">{{ device.ip_address }}</button>
                         {% else %}
                             {{ device.ip_address }}
                         {% endif %}
@@ -37,7 +37,7 @@
                     <td>{{ device.name }}</td>
                     <td>{{ device.updated_at }}</td>
                     {% if user.is_authenticated %}
-                        <td>                                                                    <!-- TODO: prevent going to device url/urls -->
+                        <td>
                             <div class="p-0 m-0 row">
                                 <div class="col-6">
                                     <a type="button" href="/device/{{ device.id }}/edit" class="btn btn-outline-dark">
