@@ -39,4 +39,7 @@ def index(request):
 
         device['updated_at_numeric'] = current_device.updated_at.strftime("%Y%m%d%H%M%S%f")  # numeric value of last change for correct sorting
 
+        if current_device.urls.all():
+            device['all_urls'] = True
+
     return render(request, 'index.html', {'devices': devices})

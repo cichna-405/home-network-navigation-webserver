@@ -37,7 +37,12 @@
                         {% else %}
                             <x data-toggle="tooltip" data-placement="top" title="žádná výchozí URL">{{ device.ip_address }}</x>
                         {% endif %}
-                        (<a class="url_link" href="/device/{{ device.id }}/urls"><small>všechny URL</small></a>)
+
+                        {% if device.all_urls %}
+                            (<a class="url_link" href="/device/{{ device.id }}/urls"><small>všechny URL</small></a>)
+                        {% else %}
+                            (<small>žádné URL</small>)
+                        {% endif %}
                     </td>
                     <td>{{ device.updated_at }}</td>
                     {% if user.is_authenticated %}
@@ -63,9 +68,11 @@
         </tbody>
     </table>
 
-    <div class="mt-2">
-        <a class="btn btn-outline-primary" href="/device/create">Nové zařízení</a>
-    </div>
+    {% if user.is_authenticated %}
+        <div class="mt-2">
+            <a class="btn btn-outline-primary" href="/device/create">Nové zařízení</a>
+        </div>
+    {% endif %}
 
 {% endblock %}
 
