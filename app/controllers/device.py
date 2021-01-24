@@ -66,13 +66,20 @@ def edit(request, device_id):
     # TODO: validation
     if request.user.is_authenticated:
         device = Device.objects.get(id=device_id)
+
         if request.method == "GET":
-            if device.urls.all().exists():
-                device['urls'] = device.urls.all()
-            return render(request, 'device/edit.html', {'device': device})
+            choices = Device._meta.get_field('type').choices
+
+            return render(request, 'device/edit.html', {
+                'device': device,
+                'urls': device.urls.all(),
+                'choices': choices,
+            })
+
         else:
-            messages.success(request, 'Změněno zařízení ' + str(device.name) + ".")
+            messages.success(request, 'Změněno zařízení ' + device.name + ".")
             return redirect('index')
+
     else:
         messages.error(request, "Přístup zablokován.")
         return redirect('index')
@@ -88,6 +95,7 @@ def delete(request, device_id):
         else:
             messages.error(request, "Nelze smazat zařízení " + device.name + ".")
         return redirect('index')
+
     else:
         messages.error(request, "Přístup zablokován.")
         return redirect('index')
