@@ -15,6 +15,7 @@ function addUrl() {
     newRow.classList.add('text-center', 'url-row');
 
     id_cell.id = `url_${newIndex}_id`;
+    id_cell.classList.add('align-middle');
     id_cell.innerHTML = newIndex.toString();
 
     let nameInput = document.createElement('input')

@@ -4,11 +4,28 @@
 
 {% endblock %}
 
-{% block title %}Zařízení | Adresy{% endblock %}
+{% block title %}{{ device.name }} | Adresy{% endblock %}
 
 {% block content %}
-    Device addresses...
-    Page is not ready yet...
+    <h1>{{ device.name }} - URL adresy</h1>
+    <table class="table table-striped text-nowrap">
+        <thead class="thead-dark">
+            <tr>
+                <th style="width: 25%;">Název</th>
+                <th style="width: 75%;">URL adresa</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for url in urls %}
+                <tr>
+                    <td>{{ url.name }}</td>
+                    <td>
+                        <button class="btn btn-link p-0 m-0" onclick="window.open(`{{ url.url }}`);">{{ url.url }}</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 
 {% block script %}

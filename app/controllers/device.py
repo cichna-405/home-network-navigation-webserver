@@ -81,9 +81,9 @@ def delete(request, device_id):
 # TODO: write urls method
 
 def urls(request, device_id):
-
-    # if current_device.urls.all().exists():  # all urls field
-    #     device['urls'] = current_device.urls.all()
-
     device = Device.objects.get(id=device_id)
-    return render(request, 'device/urls.html', {'device': device})
+
+    return render(request, 'device/urls.html', {
+        'device': device,
+        'urls': device.urls.all(),
+    })
