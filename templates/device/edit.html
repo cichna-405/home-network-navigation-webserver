@@ -3,14 +3,107 @@
 {% block css %}
 
 {% endblock %}
-
+{% load static %}
 {% block title %}Zařízení | Editovat{% endblock %}
 
 {% block content %}
-    Editing device...
-    Page is not ready yet...
+    <h1>Editace zařízení {{ device.name }}</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Název:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Název zařízení" value="{{ device.name }}">
+        </div>
+
+        <div class="form-group">
+            <label for="type">Typ zařízení:</label>
+            <select class="form-control" id="type" name="type">
+                {% for choice in choices %}
+                    <option value="{{ choice.0 }}" {% if device.type == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="ip_address">IP adresa:</label>
+            <input type="text" class="form-control" id="ip_address" name="ip_address" placeholder="IP adresa zařízení" value="{{ device.ip_address }}">
+        </div>
+
+        <div class="form-group">
+            <label for="default_url">Výchozí URL adresa:</label>
+            <select class="form-control" id="default_url" name="default_url">
+                    <option value="">žádná</option>
+                {% for url in urls %}
+                    <option value="{{ url.id }}" {% if device.default_url == url %}selected{% endif %}>{{ url.name }} ({{ url.url }})</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Popis:</label>
+            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Popis zařízení">{{ device.description }}</textarea>
+        </div>
+
+    <hr>
+
+        <div class="form-group">
+            <label for="url_table">Adresy URL pro přístup k zařízení:</label>
+            <table id="url_table" class="table table-borderless table-sm text-nowrap">
+                <thead>
+                    <tr>
+                        <td style="width: 10%" class="text-center">URL ID</td>
+                        <td style="width: 30%">Popis URL</td>
+                        <td style="width: 53%">URL adresa</td>
+                        <td style="width: 7%" class="text-center">Odebrat</td>
+                    </tr>
+                </thead>
+                <tbody id="url_table_body">
+                {% if urls %}
+                    {% for url in urls %}
+                        <tr id="url_{{ url.id }}" class="text-center">
+                            <td class="align-middle" id="url_{{ url.id }}_id">{{ url.id }}</td>
+                            <td>
+                                <input class="form-control" name="url_{{ url.id }}_name" type="text" placeholder="popis URL" value="{{ url.name }}">
+                            </td>
+                            <td>
+                                <input class="form-control" name="url_{{ url.id }}_url" type="text" placeholder="URL adresa" value="{{ url.url }}">
+                            </td>
+                            <td class="align-middle">
+                                <button type="button" class="btn btn-outline-secondary" onclick="deleteUrl({{ url.id }}, {{ device.id }});">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+
+{#                    <tr id="url_1" class="text-center url-row">#}
+{#                        <td class="align-middle" id="url_1_id">1</td>#}
+{#                        <td>#}
+{#                            <input class="form-control" name="url_1_name" type="text" placeholder="popis URL">#}
+{#                        </td>#}
+{#                        <td>#}
+{#                            <input class="form-control" name="url_1_url" type="text" placeholder="URL adresa">#}
+{#                        </td>#}
+{#                        <td class="align-middle">#}
+{#                           <button type="button" class="btn btn-outline-secondary disabled" onclick="removeTableRow(this.parentElement.parentElement.id.substr(4, Infinity));">#}
+{#                               <i class="bi bi-trash"></i>#}
+{#                           </button>#}
+{#                        </td>#}
+{#                    </tr>#}
+                {% endif %}
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-outline-secondary float-right" onclick="addUrl();">Nová URL</button>
+        </div>
+
+        <input type="submit" class="btn btn-outline-primary" value="Uložit změny">
+    </form>
+    <form method="POST" id="url_delete_form" hidden>
+        {% csrf_token %}
+    </form>
 {% endblock %}
 
 {% block script %}
-
+    <script src="{% static 'js/home/edit.js' %}" type="text/javascript"></script>
 {% endblock %}

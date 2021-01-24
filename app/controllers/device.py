@@ -109,3 +109,9 @@ def urls(request, device_id):
         'device': device,
         'urls': device.urls.all(),
     })
+
+
+@require_http_methods(['POST'])
+def delete_url(request, device_id, url_id):
+    messages.success(request, 'deletion')
+    return render(request, 'index.html')

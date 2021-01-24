@@ -1,6 +1,6 @@
 function addUrl() {
     let urlTable = document.getElementById('url_table');
-    let urlTableRows = urlTable.getElementsByClassName('url-row');
+    let urlTableRows = urlTable.rows;
     let newIndex = 1 + Number(urlTableRows[urlTableRows.length - 1].id.substr(4, Infinity));
 
     urlTableRows[urlTableRows.length - 1].getElementsByClassName('btn-outline-secondary')[0].classList.add('disabled');
@@ -12,7 +12,7 @@ function addUrl() {
     let remove_cell = newRow.insertCell(3);
 
     newRow.id = `url_${newIndex}`;
-    newRow.classList.add('text-center', 'url-row');
+    newRow.classList.add('text-center');
 
     id_cell.id = `url_${newIndex}_id`;
     id_cell.classList.add('align-middle');
@@ -35,7 +35,7 @@ function addUrl() {
     let removeButton = document.createElement('button');
     removeButton.setAttribute('type', 'button');
     removeButton.setAttribute('class', 'btn btn-outline-secondary');
-    removeButton.setAttribute('onclick', `removeTableRow(this.parentElement.parentElement.id.substr(4, 1));`);
+    removeButton.setAttribute('onclick', `removeTableRow(this.parentElement.parentElement.id.substr(4, Infinity));`);
     removeButton.innerHTML = `<i class="bi bi-trash"></i>`;
     remove_cell.appendChild(removeButton);
 }
@@ -43,7 +43,7 @@ function addUrl() {
 function removeTableRow(id) {
     let urlTable = document.getElementById('url_table');
     urlTable.deleteRow(id);
-    let tableRows = urlTable.getElementsByClassName('url-row');
+    let tableRows = urlTable.rows;
     if (tableRows.length > 1)
         tableRows[tableRows.length - 1].getElementsByClassName('btn-outline-secondary')[0].classList.remove('disabled');
 }

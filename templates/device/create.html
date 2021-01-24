@@ -53,7 +53,7 @@
                     </tr>
                 </thead>
                 <tbody id="url_table_body">
-                    <tr id="url_1" class="text-center url-row">
+                    <tr id="url_1" class="text-center">
                         <td class="align-middle" id="url_1_id">1</td>
                         <td>
                             <input class="form-control" name="url_1_name" type="text" placeholder="popis URL">
@@ -62,7 +62,7 @@
                             <input class="form-control" name="url_1_url" type="text" placeholder="URL adresa">
                         </td>
                         <td class="align-middle">
-                           <button type="button" class="btn btn-outline-secondary disabled" onclick="removeTableRow(this.parentElement.parentElement.id.substr(4, 1));">
+                           <button type="button" class="btn btn-outline-secondary disabled" onclick="removeTableRow(this.parentElement.parentElement.id.substr(4, Infinity));">
                                <i class="bi bi-trash"></i>
                            </button>
                         </td>

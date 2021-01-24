@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('device/create', device.create, name="device create"),
     path('device/<device_id>/urls', device.urls, name="device urls"),
+    path('device/<device_id>/urls/<url_id>/delete', device.delete_url, name="device delete_url"),
     path('device/<device_id>/edit', device.edit, name="device edit"),
     path('device/<device_id>/delete', device.delete, name="device delete"),
 ]
