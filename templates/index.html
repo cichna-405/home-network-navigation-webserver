@@ -14,9 +14,10 @@
         <thead class="thead-dark">
             <tr>
                 <th hidden>ip_address_numeric_value</th>
+                <th hidden>updated_at_numeric_value</th>
                 <th>Typ</th>
-                <th>Odkazy</th>
                 <th>Název</th>
+                <th>Odkazy</th>
                 <th>Poslední změna</th>
                 {% if user.is_authenticated %}
                     <th>Editace</th>
@@ -27,7 +28,9 @@
             {% for device in devices %}
                 <tr data-toggle="tooltip" data-placement="left" title="{{ device.description }}">
                     <td hidden>{{ device.ip_address_numeric }}</td>
+                    <td hidden>{{ device.updated_at_numeric }}</td>
                     <td>{{ device.type }}</td>
+                    <td>{{ device.name }}</td>
                     <td>
                         {% if device.default_url %}
                             <button class="btn btn-link p-0 m-0 url_link" onclick="window.open(`{{ device.default_url.url }}`);" data-toggle="tooltip" data-placement="top" title="{{ device.default_url.name }} ({{ device.default_url.url }})">{{ device.ip_address }}</button>
@@ -36,7 +39,6 @@
                         {% endif %}
                         (<a class="url_link" href="/device/{{ device.id }}/urls"><small>všechny URL</small></a>)
                     </td>
-                    <td>{{ device.name }}</td>
                     <td>{{ device.updated_at }}</td>
                     {% if user.is_authenticated %}
                         <td>
@@ -77,21 +79,25 @@
                 columnDefs: [
                 {
                     "orderData":[ 0 ],
-                    "targets": [ 2 ],
+                    "targets": [ 4 ],
                 },
                 {
-                    "targets": [ 0 ],
+                    "orderData":[ 1 ],
+                    "targets": [ 5 ],
+                },
+                {
+                    "targets": [ 0, 1 ],
                     "visible": false,
                     "searchable": false
                 },
                 {% if user.is_authenticated %}
                     {
                         orderable: false,
-                        targets: 5,
+                        targets: 6,
                     },
                 {% endif %}
                 ]
-            }).order([2, 'asc']).draw();
+            }).order([4, 'asc']).draw();
         });
     </script>
     <script type="text/javascript" src="{% static 'js/home/index.js' %}"></script>

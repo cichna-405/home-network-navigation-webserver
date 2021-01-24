@@ -5,6 +5,7 @@ from django.views.decorators.http import require_http_methods
 import json
 import requests
 from django.conf import settings
+from datetime import datetime
 from app.models import Device, Url
 
 
@@ -35,5 +36,7 @@ def index(request):
                 octet = "0" + octet
             ip_add_numeric += octet
         device['ip_address_numeric'] = ip_add_numeric
+
+        device['updated_at_numeric'] = current_device.updated_at.strftime("%Y%m%d%H%M%S%f")  # numeric value of last change for correct sorting
 
     return render(request, 'index.html', {'devices': devices})
