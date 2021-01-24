@@ -91,8 +91,7 @@ def delete(request, device_id):
         return redirect('index')
 
 
-# TODO: write urls method
-
+@require_http_methods(['GET'])
 def urls(request, device_id):
     device = Device.objects.get(id=device_id)
 
