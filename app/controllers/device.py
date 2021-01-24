@@ -14,6 +14,7 @@ from app.models import Device, Url
 
 @require_http_methods(['GET', 'POST'])
 def create(request):
+    # TODO: validation
     if request.user.is_authenticated:
         if request.method == "GET":
             choices = Device._meta.get_field('type').choices
@@ -62,6 +63,7 @@ def create(request):
 
 @require_http_methods(['GET', 'POST'])
 def edit(request, device_id):
+    # TODO: validation
     if request.user.is_authenticated:
         device = Device.objects.get(id=device_id)
         if request.method == "GET":
