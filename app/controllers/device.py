@@ -62,25 +62,33 @@ def create(request):
 
 @require_http_methods(['GET', 'POST'])
 def edit(request, device_id):
-    device = Device.objects.get(id=device_id)
-    if request.method == "GET":
-        if device.urls.all().exists():
-            device['urls'] = device.urls.all()
-        return render(request, 'device/edit.html', {'device': device})
+    if request.user.is_authenticated:
+        device = Device.objects.get(id=device_id)
+        if request.method == "GET":
+            if device.urls.all().exists():
+                device['urls'] = device.urls.all()
+            return render(request, 'device/edit.html', {'device': device})
+        else:
+            messages.success(request, 'Změněno zařízení ' + str(device.name) + ".")
+            return redirect('index')
     else:
-        messages.success(request, 'Změněno zařízení ' + str(device.name) + ".")
+        messages.error(request, "Přístup zablokován.")
         return redirect('index')
 
 
 @require_http_methods(['POST'])
 def delete(request, device_id):
-    device = Device.objects.get(id=device_id)
-    deleted = Device.objects.get(id=device_id).delete()
-    if deleted:
-        messages.success(request, "Smazáno zařízení " + device.name + ".")
+    if request.user.is_authenticated:
+        device = Device.objects.get(id=device_id)
+        deleted = Device.objects.get(id=device_id).delete()
+        if deleted:
+            messages.success(request, "Smazáno zařízení " + device.name + ".")
+        else:
+            messages.error(request, "Nelze smazat zařízení " + device.name + ".")
+        return redirect('index')
     else:
-        messages.error(request, "Nelze smazat zařízení " + device.name + ".")
-    return redirect('index')
+        messages.error(request, "Přístup zablokován.")
+        return redirect('index')
 
 
 # TODO: write urls method
