@@ -7,6 +7,7 @@ class Device(models.Model):
     TYPES = [
         ('UK', 'Neznámé'),
         ('RT', 'Směrovač'),
+        ('SW', 'Přepínač'),
         ('AP', 'Přístupový bod'),
         ('NS', 'Síťové úložiště'),
         ('PT', 'Tiskárna'),
