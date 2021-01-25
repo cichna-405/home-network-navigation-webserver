@@ -75,26 +75,25 @@
                             </td>
                         </tr>
                     {% endfor %}
-                {% else %}
-
-{#                    <tr id="url_1" class="text-center url-row">#}
-{#                        <td class="align-middle" id="url_1_id">1</td>#}
-{#                        <td>#}
-{#                            <input class="form-control" name="url_1_name" type="text" placeholder="popis URL">#}
-{#                        </td>#}
-{#                        <td>#}
-{#                            <input class="form-control" name="url_1_url" type="text" placeholder="URL adresa">#}
-{#                        </td>#}
-{#                        <td class="align-middle">#}
-{#                           <button type="button" class="btn btn-outline-secondary disabled" onclick="removeTableRow(this.parentElement.parentElement.id.substr(4, Infinity));">#}
-{#                               <i class="bi bi-trash"></i>#}
-{#                           </button>#}
-{#                        </td>#}
-{#                    </tr>#}
                 {% endif %}
+
+                    <tr id="new_url_1" class="text-center">
+                        <td class="align-middle" id="new_url_1_id">-</td>
+                        <td>
+                            <input class="form-control" name="new_url_1_name" type="text" placeholder="popis URL">
+                        </td>
+                        <td>
+                            <input class="form-control" name="new_url_1_url" type="text" placeholder="URL adresa">
+                        </td>
+                        <td class="align-middle">
+                           <button type="button" class="btn btn-outline-secondary" onclick="this.parentElement.parentElement.remove();">
+                               <i class="bi bi-trash"></i>
+                           </button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
-            <button type="button" class="btn btn-outline-secondary float-right" onclick="addUrl();">Nová URL</button>
+            <button type="button" class="btn btn-outline-secondary float-right" onclick="addUrl(true);">Nová URL</button>
         </div>
 
         <input type="submit" class="btn btn-outline-primary" value="Uložit změny">
@@ -106,4 +105,5 @@
 
 {% block script %}
     <script src="{% static 'js/home/edit.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/home/create.js' %}"></script>
 {% endblock %}

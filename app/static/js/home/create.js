@@ -3,7 +3,7 @@ function addUrl() {
     let urlTableRows = urlTable.rows;
     let newIndex = 1 + Number(urlTableRows[urlTableRows.length - 1].id.substr(4, Infinity));
 
-    urlTableRows[urlTableRows.length - 1].getElementsByClassName('btn-outline-secondary')[0].classList.add('disabled');
+    if(urlTableRows.length >= 2) urlTableRows[urlTableRows.length - 1].getElementsByClassName('btn-outline-secondary')[0].classList.add('disabled');
 
     let newRow = urlTable.insertRow(-1);
     let id_cell = newRow.insertCell(0);
@@ -35,15 +35,14 @@ function addUrl() {
     let removeButton = document.createElement('button');
     removeButton.setAttribute('type', 'button');
     removeButton.setAttribute('class', 'btn btn-outline-secondary');
-    removeButton.setAttribute('onclick', `removeTableRow(this.parentElement.parentElement.id.substr(4, Infinity));`);
+    removeButton.setAttribute('onclick', `removeTableRow(this.parentElement.parentElement);`);
     removeButton.innerHTML = `<i class="bi bi-trash"></i>`;
     remove_cell.appendChild(removeButton);
 }
 
-function removeTableRow(id) {
-    let urlTable = document.getElementById('url_table');
-    urlTable.deleteRow(id);
-    let tableRows = urlTable.rows;
-    if (tableRows.length > 1)
+function removeTableRow(row) {
+    row.remove();
+    let tableRows = document.getElementById('url_table').rows;
+    if (tableRows.length > 2)
         tableRows[tableRows.length - 1].getElementsByClassName('btn-outline-secondary')[0].classList.remove('disabled');
 }
