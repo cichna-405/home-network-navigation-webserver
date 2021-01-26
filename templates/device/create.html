@@ -17,12 +17,12 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="name">Název:</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Název zařízení">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Název zařízení" required>
         </div>
 
         <div class="form-group">
             <label for="ip_address">IP adresa:</label>
-            <input type="text" class="form-control" id="ip_address" name="ip_address" placeholder="IP adresa zařízení">
+            <input type="text" class="form-control" id="ip_address" name="ip_address" placeholder="IP adresa zařízení" required>
         </div>
 
         <div class="form-group">
