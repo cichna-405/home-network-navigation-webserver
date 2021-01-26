@@ -33,9 +33,9 @@
             <label for="default_url">Výchozí URL adresa:</label>
             <select class="form-control" id="default_url" name="default_url">
                     <option value="">žádná</option>
-                {% for url in urls %}
-                    <option value="{{ url.id }}" {% if device.default_url == url %}selected{% endif %}>{{ url.name }} ({{ url.url }})</option>
-                {% endfor %}
+                    {% for url in urls %}
+                        <option value="{{ url.id }}" {% if device.default_url == url %}selected{% endif %}>{{ url.name }} ({{ url.url }})</option>
+                    {% endfor %}
             </select>
         </div>
 
