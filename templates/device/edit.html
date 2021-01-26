@@ -44,66 +44,70 @@
             <textarea class="form-control" id="description" name="description" rows="3" placeholder="Popis zařízení">{{ device.description }}</textarea>
         </div>
 
+        <input type="submit" class="btn btn-outline-primary" value="Uložit změny">
+        <a class="btn btn-outline-secondary float-right" href="/">Zpět</a>
+    </form>
+
     <hr>
 
         <div class="form-group">
-            <label for="url_table">Adresy URL pro přístup k zařízení:</label>
+            <label for="url_table"><b>Adresy URL pro přístup k zařízení:</b></label>
             <table id="url_table" class="table table-borderless table-sm text-nowrap">
                 <thead>
                     <tr>
                         <td style="width: 10%" class="text-center">URL ID</td>
                         <td style="width: 30%">Popis URL</td>
                         <td style="width: 53%">URL adresa</td>
-                        <td style="width: 7%" class="text-center">Odebrat</td>
+                        <td style="width: 7%" class="text-center">Správa</td>
                     </tr>
                 </thead>
                 <tbody id="url_table_body">
                 {% if urls %}
                     {% for url in urls %}
                         <tr id="url_{{ url.id }}" class="text-center">
-                            <td class="align-middle" id="url_{{ url.id }}_id">{{ url.id }}</td>
-                            <td>
-                                <input class="form-control" name="url_{{ url.id }}_name" type="text" placeholder="popis URL" value="{{ url.name }}">
-                            </td>
-                            <td>
-                                <input class="form-control" name="url_{{ url.id }}_url" type="text" placeholder="URL adresa" value="{{ url.url }}">
-                            </td>
-                            <td class="align-middle">
-                                <button type="button" class="btn btn-outline-secondary" onclick="deleteUrl({{ url.id }}, {{ device.id }});">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
+                            <form class="p-0 m-0" method="POST" action="/device/{{ device.id }}/urls/{{ url.id }}/edit">
+                                {% csrf_token %}
+                                <td class="align-middle">{{ url.id }}</td>
+                                <td>
+                                    <input class="form-control" name="name" type="text" placeholder="popis URL" value="{{ url.name }}">
+                                </td>
+                                <td>
+                                    <input class="form-control" name="url" type="text" placeholder="URL adresa" value="{{ url.url }}">
+                                </td>
+                                <td class="align-middle">
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        <i class="bi bi-pen"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="$('#deleteForm_{{ url.id }}').submit();">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </form>
+                            <form id="deleteForm_{{ url.id }}" method="POST" action="/device/{{ device.id }}/urls/{{ url.id }}/delete">{% csrf_token %}</form>
                         </tr>
                     {% endfor %}
                 {% endif %}
 
-                    <tr id="new_url_1" class="text-center">
-                        <td class="align-middle" id="new_url_1_id">-</td>
-                        <td>
-                            <input class="form-control" name="new_url_1_name" type="text" placeholder="popis URL">
-                        </td>
-                        <td>
-                            <input class="form-control" name="new_url_1_url" type="text" placeholder="URL adresa">
-                        </td>
-                        <td class="align-middle">
-                           <button type="button" class="btn btn-outline-secondary" onclick="this.parentElement.parentElement.remove();">
-                               <i class="bi bi-trash"></i>
-                           </button>
-                        </td>
+                    <tr id="new_url" class="text-center">
+                        <form class="p-0 m-0" action="/device/{{ device.id }}/urls/create" method="POST">
+                            {% csrf_token %}
+                            <td class="align-middle">nová</td>
+                            <td>
+                                <input class="form-control" name="new_name" type="text" placeholder="popis URL">
+                            </td>
+                            <td>
+                                <input class="form-control" name="new_url" type="text" placeholder="URL adresa">
+                            </td>
+                            <td class="align-middle">
+                               <button type="submit" class="btn btn-outline-secondary">nová URL</button>
+                            </td>
+                        </form>
                     </tr>
                 </tbody>
             </table>
-            <button type="button" class="btn btn-outline-secondary float-right" onclick="addUrl(true);">Nová URL</button>
         </div>
-
-        <input type="submit" class="btn btn-outline-primary" value="Uložit změny">
-    </form>
-    <form method="POST" id="url_delete_form" hidden>
-        {% csrf_token %}
-    </form>
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'js/home/edit.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/home/create.js' %}"></script>
+
 {% endblock %}

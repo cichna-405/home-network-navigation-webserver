@@ -78,7 +78,7 @@ def edit(request, device_id):
 
         else:
             messages.success(request, 'Změněno zařízení ' + device.name + ".")
-            return redirect('index')
+            return redirect('device edit', device_id)
 
     else:
         messages.error(request, "Přístup zablokován.")
@@ -113,5 +113,29 @@ def urls(request, device_id):
 
 @require_http_methods(['POST'])
 def delete_url(request, device_id, url_id):
-    messages.success(request, 'deletion')
-    return render(request, 'index.html')
+    if request.user.is_authenticated:
+        messages.success(request, 'Url ' + url_id + ' byla smazána.')
+        return redirect('device edit', device_id)
+    else:
+        messages.error(request, "Přístup zablokován.")
+        return redirect('index')
+
+
+@require_http_methods(['POST'])
+def edit_url(request, device_id, url_id):
+    if request.user.is_authenticated:
+        messages.success(request, 'URL ' + url_id + ' byla změněna.')
+        return redirect('device edit', device_id)
+    else:
+        messages.error(request, "Přístup zablokován.")
+        return redirect('index')
+
+
+@require_http_methods(['POST'])
+def create_url(request, device_id):
+    if request.user.is_authenticated:
+        messages.success(request, 'Vytvořena nová URL pro zařízení ' + Device.objects.get(id=device_id).name + '.')
+        return redirect('device edit', device_id)
+    else:
+        messages.error(request, "Přístup zablokován.")
+        return redirect('index')
