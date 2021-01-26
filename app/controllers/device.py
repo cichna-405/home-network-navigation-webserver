@@ -8,6 +8,8 @@ import requests
 from django.conf import settings
 from app.models import Device, Url
 from app.decorators import login_required
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 
 
 # Create your views here.
@@ -16,51 +18,60 @@ from app.decorators import login_required
 @login_required
 @require_http_methods(['GET', 'POST'])
 def create(request):
-    # TODO: validation
     if request.method == "GET":
         choices = Device._meta.get_field('type').choices
         return render(request, 'device/create.html', {'choices': choices})  # choices = array of possible device types
 
     else:
-        device_type = request.POST.get('type')                              # device type
+        device_type = request.POST.get('type')  # device type
         if not device_type:
             device_type = 'UK'
 
-        new_device = Device.objects.create(                                 # device creation
+        new_device = Device.objects.create(  # device creation
             type=device_type,
             ip_address=request.POST.get('ip_address'),
             name=request.POST.get('name'),
             description=request.POST.get('description'),
         )
         new_device.save()
+        messages.success(request, 'Vytvořeno zařízení ' + new_device.name + ".")
 
         i = 1
-        while True:                                                         # urls creation
+        x = 0
+        validate = URLValidator()
+
+        while True:  # urls creation
             url_name = request.POST.get('url_' + str(i) + '_name')
             url_url = request.POST.get('url_' + str(i) + '_url')
 
             if not url_name or not url_url:
                 break
-            new_url = Url.objects.create(
-                name=url_name,
-                url=url_url,
-                device=new_device,
-            )
-            new_url.save()
+            try:
+                validate(url_url)
+                x += 1
+                new_url = Url.objects.create(
+                    name=url_name,
+                    url=url_url,
+                    device=new_device,
+                )
+                new_url.save()
+                messages.success(request, 'URL ' + url_name + ' byla úspěšně vytvořena.')
 
-            if i == 1:                                                      # set default_url for the device
-                Device.objects.filter(ip_address=new_device.ip_address).update(default_url=new_url)
+                if x == 1:  # set default_url for the device
+                    Device.objects.filter(ip_address=new_device.ip_address).update(default_url=new_url)
+
+            except ValidationError:
+                messages.error(request, 'URL ' + url_name + ' byla ve špatném formátu. Vytvořte novou na stránce pro'
+                                                            ' editaci zařízení.')
 
             i += 1
 
-        messages.success(request, 'Vytvořeno zařízení ' + new_device.name + ".")
         return redirect('index')
 
 
 @login_required
 @require_http_methods(['GET', 'POST'])
 def edit(request, device_id):
-    # TODO: validation
     device = Device.objects.get(id=device_id)
 
     if request.method == "GET":
@@ -143,26 +154,30 @@ def delete_url(request, device_id, url_id):
 @login_required
 @require_http_methods(['POST'])
 def edit_url(request, device_id, url_id):
+    validate = URLValidator()
     url_name = request.POST.get('name')
     url_url = request.POST.get('url')
-    if url_name and url_url:
+    try:
+        validate(url_url)
         url = Url.objects.get(id=int(url_id))
         url.name = url_name
         url.url = url_url
         url.save()
         messages.success(request, 'URL ' + url_id + ' byla změněna.')
-    else:
-        messages.error(request, 'Zadejte platné hodnoty!')
+    except ValidationError:
+        messages.error(request, 'Adresa URL ' + url_name + " nemá platný formát.")
     return redirect('device edit', device_id)
 
 
 @login_required
 @require_http_methods(['POST'])
 def create_url(request, device_id):
+    validate = URLValidator()
     new_url_device = Device.objects.get(id=int(device_id))
     new_url_name = request.POST.get('new_name')
     new_url_url = request.POST.get('new_url')
-    if new_url_name and new_url_url:
+    try:
+        validate(new_url_url)
         new_url = Url.objects.create(
             device=new_url_device,
             name=new_url_name,
@@ -170,6 +185,6 @@ def create_url(request, device_id):
         )
         new_url.save()
         messages.success(request, 'URL ' + new_url_name + ' byla vytvořena.')
-    else:
-        messages.error(request, 'Zadejte platné hodnoty!')
+    except ValidationError:
+        messages.error(request, 'Adresa URL ' + new_url_name + " nemá platný formát.")
     return redirect('device edit', device_id)
