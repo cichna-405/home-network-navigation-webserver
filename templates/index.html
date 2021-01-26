@@ -70,9 +70,16 @@
     </table>
 
     {% if user.is_authenticated %}
-        <div class="mt-2">
-            <a class="btn btn-outline-primary" href="/device/create">Nové zařízení</a>
-        </div>
+        <a class="btn btn-outline-primary mt-2" href="/device/create">Nové zařízení</a>
+    {% endif %}
+    {% if not user.is_authenticated %}
+        <a type="button" class="btn btn-success mt-2 float-right" href="/users/login">Přihlásit se</a>
+    {% else %}
+        <form method="POST" action="/users/logout" class="m-0 p-0 float-right">
+        {% csrf_token %}
+            <a type="button" class="btn btn-outline-secondary mt-2" href="/admin">Admin stránky</a>
+            <button type="submit" class="btn btn-danger mt-2">Odhlásit se</button>
+        </form>
     {% endif %}
 
 {% endblock %}

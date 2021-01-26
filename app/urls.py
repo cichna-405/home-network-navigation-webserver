@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .controllers import home, device
+from .controllers import home, device, users
 
 urlpatterns = [
     path('', home.index, name="index"),
     path('admin/', admin.site.urls),
+    path('users/login', users.login, name="login"),
+    path('users/logout', users.logout, name="logout"),
     path('device/create', device.create, name="device create"),
     path('device/<device_id>/urls', device.urls, name="device urls"),
     path('device/<device_id>/urls/create', device.create_url, name="device create_url"),
