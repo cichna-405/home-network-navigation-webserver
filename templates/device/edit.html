@@ -8,11 +8,12 @@
 
 {% block content %}
     <h1>Editace zařízení {{ device.name }}</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" class="g-3 needs-validation" novalidate>
         {% csrf_token %}
         <div class="form-group">
             <label for="name">Název:</label>
             <input type="text" class="form-control" id="name" name="name" placeholder="Název zařízení" value="{{ device.name }}" required>
+            <div class="invalid-feedback">Zadejte platný název.</div>
         </div>
 
         <div class="form-group">
@@ -26,7 +27,8 @@
 
         <div class="form-group">
             <label for="ip_address">IP adresa:</label>
-            <input type="text" class="form-control" id="ip_address" name="ip_address" placeholder="IP adresa zařízení" value="{{ device.ip_address }}" required>
+            <input type="text" class="form-control" id="ip_address" oninput="ip_validate(this);" name="ip_address" placeholder="IP adresa zařízení" value="{{ device.ip_address }}" required>
+            <div class="invalid-feedback">Zadejte platnou IP adresu.</div>
         </div>
 
         <div class="form-group">
@@ -93,10 +95,10 @@
                             {% csrf_token %}
                             <td class="align-middle">nová</td>
                             <td>
-                                <input class="form-control" name="new_name" type="text" placeholder="popis URL">
+                                <input class="form-control" name="new_name" type="text" placeholder="popis URL" required>
                             </td>
                             <td>
-                                <input class="form-control" name="new_url" type="text" placeholder="URL adresa">
+                                <input class="form-control" name="new_url" type="text" placeholder="URL adresa" required>
                             </td>
                             <td class="align-middle">
                                <button type="submit" class="btn btn-outline-secondary">nová URL</button>
@@ -109,5 +111,5 @@
 {% endblock %}
 
 {% block script %}
-
+    <script src="{% static 'js/validation.js' %}"></script>
 {% endblock %}

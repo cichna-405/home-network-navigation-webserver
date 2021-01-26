@@ -38,6 +38,7 @@ def create(request):
         while True:                                                         # urls creation
             url_name = request.POST.get('url_' + str(i) + '_name')
             url_url = request.POST.get('url_' + str(i) + '_url')
+
             if not url_name or not url_url:
                 break
             new_url = Url.objects.create(
