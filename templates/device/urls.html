@@ -1,0 +1,37 @@
+{% extends 'layouts/layout.html' %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block title %}{{ device.name }} | Adresy{% endblock %}
+
+{% block content %}
+    {% if urls %}
+        <h1>{{ device.name }} - URL adresy</h1>
+        <table class="table table-striped text-nowrap">
+            <thead class="thead-dark">
+                <tr>
+                    <th style="width: 25%;">Název</th>
+                    <th style="width: 75%;">URL adresa</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for url in urls %}
+                    <tr>
+                        <td>{{ url.name }}</td>
+                        <td>
+                            <button class="btn btn-link p-0 m-0" onclick="window.open(`{{ url.url }}`);">{{ url.url }}</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h3>Zařízení nemá žádné přiřazené URL adresy</h3>
+    {% endif %}
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

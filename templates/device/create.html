@@ -1,0 +1,85 @@
+{% extends 'layouts/layout.html' %}
+
+{% load static %}
+
+{% block css %}
+    <style>
+        label{font-weight: bolder}                      {# bold labels #}
+        .disabled {pointer-events: none;}               {# no onclick events for disabled buttons #}
+    </style>
+{% endblock %}
+
+{% block title %}Zařízení | Vytvořit{% endblock %}
+
+{% block content %}
+    <h1>Vytvořit nové zařízení</h1>
+    <form method="post" enctype="multipart/form-data" class="g-3 needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Název:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Název zařízení" required>
+            <div class="invalid-feedback">Zadejte platný název zařízení.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="ip_address">IP adresa:</label>
+            <input type="text" class="form-control" id="ip_address" oninput="ip_validate(this);" name="ip_address" placeholder="IP adresa zařízení" required>
+            <div class="invalid-feedback">Zadejte platnou IP adresu.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="type">Typ zařízení:</label>
+            <select class="form-control" id="type" name="type" required>
+                {% for choice in choices %}
+                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">Vyberte typ zařízení.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Popis:</label>
+            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Popis zařízení"></textarea>
+        </div>
+
+    <hr>
+
+        <div class="form-group">
+            <label for="url_table">Adresy URL pro přístup k zařízení:</label>
+            <table id="url_table" class="table table-borderless table-sm text-nowrap">
+                <thead>
+                    <tr>
+                        <td style="width: 10%" class="text-center">URL</td>
+                        <td style="width: 30%">Popis URL</td>
+                        <td style="width: 53%">URL adresa</td>
+                        <td style="width: 7%" class="text-center">Odebrat</td>
+                    </tr>
+                </thead>
+                <tbody id="url_table_body">
+                    <tr id="url_1" class="text-center">
+                        <td class="align-middle" id="url_1_id">1</td>
+                        <td>
+                            <input class="form-control" name="url_1_name" type="text" placeholder="popis URL">
+                        </td>
+                        <td>
+                            <input class="form-control" name="url_1_url" type="text" placeholder="URL adresa">
+                        </td>
+                        <td class="align-middle">
+                           <button type="button" class="btn btn-outline-secondary disabled" onclick="removeTableRow(this.parentElement.parentElement);">
+                               <i class="bi bi-trash"></i>
+                           </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-outline-secondary float-right" onclick="addUrl();">Nová URL</button>
+        </div>
+
+        <input type="submit" class="btn btn-outline-primary" value="Vytvořit zařízení">
+    </form>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/home/create.js' %}"></script>
+    <script src="{% static 'js/validation.js' %}"></script>
+{% endblock %}

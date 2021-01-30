@@ -1,0 +1,27 @@
+{% extends 'layouts/layout.html' %}
+
+{% block css %}
+    {# css links #}
+{% endblock %}
+
+{% block title %}Přihlášení{% endblock %}
+
+{% block content %}
+    <form method="POST" class="w-50 mx-auto">
+        {% csrf_token %}
+        <h1>Přihlášení</h1>
+        <div class="form-group">
+            <label for="username">Přihlašovací jméno:</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Přihlašovací jméno" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Heslo:</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Heslo" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Přihlásit se</button>
+    </form>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}
